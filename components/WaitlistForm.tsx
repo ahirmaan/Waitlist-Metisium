@@ -54,18 +54,9 @@ const WaitlistForm: React.FC = () => {
     setMessage('');
 
     try {
-  const response = await fetch('https://<your-worker-name>.<your-subdomain>.workers.dev/join', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email }),
-});
-
-  const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to join waitlist.');
-        }
-
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([{ email: email.toLowerCase() }]);
 
       if (error) {
         console.error('Supabase API error:', error);
